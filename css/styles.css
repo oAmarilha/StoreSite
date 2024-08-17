@@ -153,16 +153,16 @@ header h1 {
 .product-images {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Ajuste o tamanho mínimo conforme necessário */
-    gap: 10px; /* Espaço entre as imagens */
-    justify-content: center;
+    gap: 10px;
+    padding: 1rem;
 }
 
 .product-images img {
     width: 100%;
-    height: auto;
-    object-fit: cover; /* Garante que a imagem se ajuste ao contêiner sem distorção */
-    border: 1px solid #ddd; /* Opcional: adicionar uma borda para separar as imagens */
-    border-radius: 5px; /* Opcional: adicionar bordas arredondadas */
+    height: 200px; /* Altura fixa */
+    object-fit: cover;
+    border: 1px solid #ddd;
+    border-radius: 5px;
 }
 
 .product-info h2 {

@@ -1,57 +1,55 @@
 // js/product.js
 import { db, storage } from './firebase-config.js';
-import { doc, getDoc } from 'https://www.gstatic.com/firebasejs/9.20.0/firebase-firestore.js';
+import { collection, query, where, getDocs } from 'https://www.gstatic.com/firebasejs/9.20.0/firebase-firestore.js';
 import { ref, getDownloadURL } from 'https://www.gstatic.com/firebasejs/9.20.0/firebase-storage.js';
 
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", async function() {
     const urlParams = new URLSearchParams(window.location.search);
     const category = urlParams.get('category');
     const name = urlParams.get('name');
 
     const productInfo = document.getElementById('product-info');
-    const productImages = document.getElementById('product-images');
-    const modal = document.getElementById('image-modal');
-    const modalImg = document.getElementById('modal-img');
-    const closeModal = document.querySelector('.close');
 
-    if (category && name) {
-        const productDoc = doc(db, 'products', name);
-        getDoc(productDoc).then(docSnap => {
-            if (docSnap.exists()) {
-                const data = docSnap.data();
-                productInfo.innerHTML = `
-                    <h2>${data.name}</h2>
-                    <p>Categoria: ${data.Category}</p>
-                    <p>Preço: R$ ${data.price.toFixed(2)}</p>
-                `;
+    async function fetchProductImages() {
+        const productCollection = collection(db, 'products');
+        const q = query(productCollection, where('category', '==', category), where('name', '==', name));
+        
+        const querySnapshot = await getDocs(q);
+        if (querySnapshot.empty) {
+            productInfo.innerHTML = '<p>Produto não encontrado.</p>';
+            return;
+        }
 
-                data.images.forEach(imagePath => {
-                    const img = document.createElement('img');
-                    const imageRef = ref(storage, imagePath);
-                    getDownloadURL(imageRef).then(url => {
-                        img.src = url;
-                        img.alt = `${data.name} - Imagem`;
-                        img.classList.add('product-image');
-                        img.addEventListener('click', () => {
-                            modal.style.display = 'block';
-                            modalImg.src = url;
-                        });
-                        productImages.appendChild(img);
-                    });
-                });
-            } else {
-                productInfo.innerHTML = '<p>Produto não encontrado.</p>';
-            }
-        });
+        const productDoc = querySnapshot.docs[0].data();
+        const imageUrls = await Promise.all(productDoc.images.map(async (imagePath) => {
+            const imageRef = ref(storage, imagePath);
+            return getDownloadURL(imageRef);
+        }));
 
-        closeModal.addEventListener('click', () => {
-            modal.style.display = 'none';
-        });
-
-        window.addEventListener('click', (event) => {
-            if (event.target === modal) {
-                modal.style.display = 'none';
-            }
-        });
+        return imageUrls;
     }
+
+    async function renderProductImages() {
+        const imageUrls = await fetchProductImages();
+        productInfo.innerHTML = ''; // Limpa a área de informações do produto
+
+        if (imageUrls.length === 0) {
+            productInfo.innerHTML = '<p>Sem imagens disponíveis.</p>';
+            return;
+        }
+
+        const imagesContainer = document.createElement('div');
+        imagesContainer.classList.add('product-images');
+
+        imageUrls.forEach(url => {
+            const img = document.createElement('img');
+            img.src = url;
+            img.alt = 'Imagem do produto';
+            imagesContainer.appendChild(img);
+        });
+
+        productInfo.appendChild(imagesContainer);
+    }
+
+    renderProductImages();
 });

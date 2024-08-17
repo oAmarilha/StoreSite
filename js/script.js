@@ -1,10 +1,8 @@
-// js/script.js
 import { db, storage } from './firebase-config.js';
-import { collection, getDocs, query, where } from 'https://www.gstatic.com/firebasejs/9.20.0/firebase-firestore.js';
+import { collection, getDocs, query } from 'https://www.gstatic.com/firebasejs/9.20.0/firebase-firestore.js';
 import { ref, getDownloadURL } from 'https://www.gstatic.com/firebasejs/9.20.0/firebase-storage.js';
 
 document.addEventListener("DOMContentLoaded", function() {
-    const imagesFolder = 'images/';
     const catalog = document.getElementById('catalog');
     const navLinks = document.querySelectorAll('.nav-links a');
 
@@ -14,15 +12,20 @@ document.addEventListener("DOMContentLoaded", function() {
         const q = query(productsCollection);
 
         const querySnapshot = await getDocs(q);
-        querySnapshot.forEach((doc) => {
+        for (const doc of querySnapshot.docs) {
             const data = doc.data();
+            const imageUrls = await Promise.all(data.images.map(async (imagePath) => {
+                const imageRef = ref(storage, imagePath);
+                return getDownloadURL(imageRef);
+            }));
+
             products.push({
-                category: data.Category,
+                category: data.category || 'Outras', // Garantir que a categoria esteja presente
                 name: data.name,
                 price: data.price,
-                images: data.images
+                images: imageUrls
             });
-        });
+        }
 
         // Ordena os produtos por nome
         products.sort((a, b) => a.name.localeCompare(b.name));
@@ -41,12 +44,15 @@ document.addEventListener("DOMContentLoaded", function() {
                 const productCard = document.createElement('div');
                 productCard.classList.add('product-card');
 
+                // Verifica se há imagens e usa a primeira
                 const productImage = document.createElement('img');
-                productImage.src = product.images[0]; // Pegue a primeira imagem
+                productImage.src = product.images.length > 0 ? product.images[0] : ''; // Usa a primeira imagem ou define como vazio
                 productImage.alt = product.name;
                 productImage.style.cursor = 'pointer';
                 productImage.addEventListener('click', () => {
-                    window.location.href = `product.html?category=${product.category}&name=${product.name}`;
+                    const category = encodeURIComponent(product.category);
+                    const name = encodeURIComponent(product.name);
+                    window.location.href = `product.html?category=${category}&name=${name}`;
                 });
 
                 const productTitle = document.createElement('h2');
@@ -71,13 +77,20 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     }
 
+    // Função para aplicar o filtro de categoria
+    function applyFilter(category) {
+        renderProducts(category);
+    }
+
+    // Inicializa o catálogo com todos os produtos
     renderProducts();
 
+    // Adiciona eventos de clique aos links de navegação para aplicar o filtro
     navLinks.forEach(link => {
         link.addEventListener('click', (event) => {
             event.preventDefault();
             const category = event.target.getAttribute('data-category');
-            renderProducts(category);
+            applyFilter(category);
         });
     });
 });
