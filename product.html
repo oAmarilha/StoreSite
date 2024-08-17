@@ -3,26 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detalhes do Produto</title>
-    <link rel="stylesheet" href="css/styles.css">
-    <script type="module" src="js/product.js" defer></script>
+    <title>Product Details</title>
+    <link rel="stylesheet" href="./css/styles.css">
 </head>
 <body>
     <header>
         <nav>
-            <h1>Detalhes do Produto</h1>
+            <h1><a href="index.html">My Store</a></h1>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <!-- Outras links de navegação, se necessário -->
+            </ul>
         </nav>
     </header>
     <main>
-        <div id="product-info" class="product-info"></div>
-    
-        <!-- Modal -->
+        <div class="product-info">
+            <h2>Detalhes do Produto</h2>
+            <!-- As informações do produto serão injetadas aqui pelo script.js -->
+        </div>
+
         <div id="image-modal" class="modal">
             <span class="close">&times;</span>
-            <button class="nav-button prev-button">&#10094;</button>
             <img class="modal-content" id="modal-image">
+            <button class="nav-button prev-button">&#10094;</button>
             <button class="nav-button next-button">&#10095;</button>
         </div>
     </main>
+    <script type="module" src="js/product.js"></script>
 </body>
 </html>

@@ -64,7 +64,7 @@ function renderProductDetails(product) {
             imagesContainer.appendChild(img);
         });
 
-        const productInfo = document.getElementById('product-info');
+        const productInfo = document.querySelector('.product-info');
         productInfo.appendChild(title);
         productInfo.appendChild(price);
         productInfo.appendChild(imagesContainer);
