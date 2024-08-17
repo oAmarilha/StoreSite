@@ -91,7 +91,18 @@ function showPrevImage() {
     showImage(currentImageIndex);
 }
 
-// Evento para fechar o modal
+// Função para fechar o modal ao clicar fora dele
+function closeModal(event) {
+    // Verifica se o clique ocorreu fora da área do modal
+    if (event.target === modal) {
+        modal.style.display = 'none';
+    }
+}
+
+// Evento para fechar o modal ao clicar fora dele
+modal.addEventListener('click', closeModal);
+
+// Evento para fechar o modal clicando no botão de fechar
 document.querySelector('.close').addEventListener('click', () => {
     modal.style.display = 'none';
 });
