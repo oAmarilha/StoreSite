@@ -65,3 +65,31 @@ button:hover {
     background-color: #0056b3;
 }
 
+/* Adicione isso ao seu arquivo upload.css */
+.image-preview-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.image-preview {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ddd;
+    padding: 5px;
+    cursor: move;
+    background-color: #f9f9f9;
+}
+
+.image-preview img {
+    max-width: 100px;
+    margin-right: 10px;
+}
+
+.image-preview:hover {
+    background-color: #f0f0f0;
+}
+
+.image-preview.dragging {
+    opacity: 0.5;
+}

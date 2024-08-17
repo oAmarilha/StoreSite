@@ -22,6 +22,15 @@
             <label for="productImages">Imagens do Produto:</label>
             <input type="file" id="productImages" name="productImages" accept="image/*" multiple required>
 
+            <div id="imagePreviewContainer">
+                <!-- Imagens selecionadas serão exibidas aqui -->
+            </div>
+
+            <div id="uploadCounter">
+                <!-- Contador de arquivos será exibido aqui -->
+                <span id="currentFileNumber">Arquivo: 0</span> de <span id="totalFilesNumber">0</span>
+            </div>
+
             <label for="productPrice">Preço do Produto (R$):</label>
             <input type="number" id="productPrice" name="productPrice" required>
 
@@ -30,7 +39,7 @@
                 <option value="Camisetas">Camisetas</option>
                 <option value="Calças">Calças</option>
                 <option value="Tênis">Tênis</option>
-                <option value="Vestidos">Vestidos</option>
+                <option value="Mochilas">Mochilas</option>
                 <option value="Jaquetas">Jaquetas</option>
                 <option value="Outras">Outras</option>
             </select>
