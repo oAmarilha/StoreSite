@@ -123,9 +123,9 @@ header h1 {
 
 .modal-content {
     margin: auto;
-    display: block;
     max-width: 90%;
     max-height: 90%;
+    display: block;
 }
 
 .close {
@@ -145,24 +145,30 @@ header h1 {
     cursor: pointer;
 }
 
+
 .product-info {
     text-align: center;
     margin: 20px;
 }
 
 .product-images {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Ajuste o tamanho mínimo conforme necessário */
-    gap: 10px;
-    padding: 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center; /* Centraliza horizontalmente */
+    gap: 20px; /* Espaço entre as imagens */
+    margin: 20px 0; /* Margem superior e inferior */
 }
 
 .product-images img {
-    width: 100%;
-    height: 200px; /* Altura fixa */
-    object-fit: cover;
-    border: 1px solid #ddd;
-    border-radius: 5px;
+    max-width: 300px; /* Tamanho máximo das imagens */
+    max-height: 300px; /* Altura máxima das imagens */
+    object-fit: cover; /* Mantém a proporção da imagem e cobre o espaço */
+    cursor: pointer;
+    transition: transform 0.3s ease; /* Adiciona uma animação ao passar o mouse */
+}
+
+.product-images img:hover {
+    transform: scale(1.05); /* Aumenta a imagem ao passar o mouse */
 }
 
 .product-info h2 {
@@ -171,4 +177,29 @@ header h1 {
 
 .product-info p {
     margin: 10px 0;
+}
+
+.nav-button {
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    font-size: 24px;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 1001;
+}
+
+.prev-button {
+    left: 10px;
+}
+
+.next-button {
+    right: 10px;
+}
+
+.nav-button:hover {
+    background-color: rgba(0, 0, 0, 0.8);
 }
