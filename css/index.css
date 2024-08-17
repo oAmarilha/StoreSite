@@ -132,7 +132,7 @@ header h1 {
 
 .product-card img {
     width: 100%;
-    height: 200px; /* Altura fixa */
+    height: 100%; /* Altura fixa */
     object-fit: cover; /* Corta e centraliza a imagem */
 }
 
