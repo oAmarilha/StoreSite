@@ -37,7 +37,6 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     // Função para renderizar produtos no catálogo
-    // Função para renderizar produtos no catálogo
 function renderProducts(filterCategory = 'all') {
     const loading = document.getElementById('loading');
     catalog.innerHTML = ''; // Limpa o catálogo
@@ -145,6 +144,9 @@ function renderProducts(filterCategory = 'all') {
     // Adiciona eventos de clique aos links de navegação móvel para aplicar o filtro
     mobileNavLinks.forEach(link => {
         link.addEventListener('click', (event) => {
+            if (link.classList.contains('manage-link')) {
+                return; // Ignora o link "Gerenciar Coleções"
+            }
             event.preventDefault();
             const category = event.target.getAttribute('data-category');
             applyFilter(category);

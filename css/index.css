@@ -86,7 +86,7 @@ header h1 {
     position: absolute;
     top: 100%;
     right: 0;
-    background-color: #0277bd; /* Azul escuro */
+    background-color: rgb(59, 59, 59); /* Azul escuro */
     width: 100vw; /* Largura total da viewport */
     max-width: 300px; /* Largura máxima para o menu */
     z-index: 1000;
@@ -211,6 +211,10 @@ header h1 {
 
     .catalog {
         padding: 1rem; /* Ajusta o padding para telas menores */
+    }
+
+    .manage-collections-button {
+        display: none;
     }
 }
 
