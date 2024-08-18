@@ -56,7 +56,7 @@ header h1 {
 .manage-collections-button {
     display: inline-block;
     padding: 10px 15px;
-    background-color: #555555;
+    background-color: #1981CD;
     color: white;
     text-decoration: none;
     border-radius: 5px;
@@ -247,3 +247,51 @@ header h1 {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
+
+/* Nome */
+.Nome {
+    position: fixed;
+    top: 24px;
+    left: 32px;
+    background-color: #1981CD;
+    width: 314px !important;
+    height: 48px;
+    display: flex;
+    color: white;
+    align-items: center;
+    padding: 4px;
+    border-radius: 10px;
+    z-index: 2022;
+    box-shadow: #fcfeff;
+}
+
+/*Animacao*/
+.wrapper {
+    width: 314px !important;
+    height: 48px;
+    /*This part is important for centering*/
+    display: grid;
+    place-items: center;
+  }
+  
+  .typing-demo {
+    width: 10ch;
+    animation: typing 2s steps(10), blink .5s step-end infinite alternate;
+    white-space: nowrap;
+    overflow: hidden;
+    border-right: 3px solid;
+    font-family: monospace;
+    font-size: 2em;
+  }
+  
+  @keyframes typing {
+    from {
+      width: 0
+    }
+  }
+      
+  @keyframes blink {
+    50% {
+      border-color: transparent
+    }
+  }
