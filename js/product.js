@@ -122,11 +122,14 @@ function getQueryParams() {
 
 // Função para carregar o produto com base na URL
 async function loadProduct() {
+    const loading = document.getElementById('loading');
+    loading.style.display = 'flex'; // Mostra o loading
     const { name } = getQueryParams();
     if (name) {
         const product = await fetchProductByName(name);
         renderProductDetails(product);
     }
+    loading.style.display = 'none'; // Esconde o loading após o carregamento
 }
 
 // Chama a função para carregar o produto ao carregar a página

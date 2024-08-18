@@ -37,55 +37,60 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     // Função para renderizar produtos no catálogo
-    function renderProducts(filterCategory = 'all') {
-        catalog.innerHTML = ''; // Limpa o catálogo
-        noProductsMessageContainer.style.display = 'none'; // Esconde a mensagem de nenhum produto
+    // Função para renderizar produtos no catálogo
+function renderProducts(filterCategory = 'all') {
+    const loading = document.getElementById('loading');
+    catalog.innerHTML = ''; // Limpa o catálogo
+    noProductsMessageContainer.style.display = 'none'; // Esconde a mensagem de nenhum produto
+    loading.style.display = 'flex'; // Mostra o loading
 
-        fetchAllProducts().then(products => {
-            const filteredProducts = filterCategory === 'all' ?
-                products :
-                products.filter(product => product.category === filterCategory);
+    fetchAllProducts().then(products => {
+        const filteredProducts = filterCategory === 'all' ?
+            products :
+            products.filter(product => product.category === filterCategory);
 
-            if (filteredProducts.length === 0) {
-                noProductsMessageContainer.style.display = 'flex'; // Mostra a mensagem se não houver produtos
-            }
+        if (filteredProducts.length === 0) {
+            noProductsMessageContainer.style.display = 'flex'; // Mostra a mensagem se não houver produtos
+        }
 
-            filteredProducts.forEach(product => {
-                const productCard = document.createElement('div');
-                productCard.classList.add('product-card');
+        filteredProducts.forEach(product => {
+            const productCard = document.createElement('div');
+            productCard.classList.add('product-card');
 
-                // Verifica se há imagens e usa a primeira
-                const productImage = document.createElement('img');
-                productImage.src = product.images.length > 0 ? product.images[0] : ''; // Usa a primeira imagem ou define como vazio
-                productImage.alt = product.name;
-                productImage.style.cursor = 'pointer';
-                productImage.addEventListener('click', () => {
-                    const category = encodeURIComponent(product.category);
-                    const name = encodeURIComponent(product.name);
-                    window.location.href = `product.html?category=${category}&name=${name}`;
-                });
-
-                const productTitle = document.createElement('h2');
-                productTitle.textContent = product.name;
-
-                const productPrice = document.createElement('p');
-                productPrice.textContent = `R$ ${product.price.toFixed(2)}`;
-
-                const buyButton = document.createElement('a');
-                buyButton.href = `https://wa.me/5519971342856?text=Olá, gostaria de comprar a ${product.name}.`;
-                buyButton.target = "_blank"; // Abre em uma nova guia
-                buyButton.classList.add('buy-button');
-                buyButton.textContent = 'Comprar';
-
-                productCard.appendChild(productImage);
-                productCard.appendChild(productTitle);
-                productCard.appendChild(productPrice);
-                productCard.appendChild(buyButton);
-
-                catalog.appendChild(productCard);
+            const productImage = document.createElement('img');
+            productImage.src = product.images.length > 0 ? product.images[0] : ''; 
+            productImage.alt = product.name;
+            productImage.style.cursor = 'pointer';
+            productImage.addEventListener('click', () => {
+                const category = encodeURIComponent(product.category);
+                const name = encodeURIComponent(product.name);
+                window.location.href = `product.html?category=${category}&name=${name}`;
             });
+
+            const productTitle = document.createElement('h2');
+            productTitle.textContent = product.name;
+
+            const productPrice = document.createElement('p');
+            productPrice.textContent = `R$ ${product.price.toFixed(2)}`;
+
+            const buyButton = document.createElement('a');
+            buyButton.href = `https://wa.me/5519971342856?text=Olá, gostaria de comprar a ${product.name}.`;
+            buyButton.target = "_blank";
+            buyButton.classList.add('buy-button');
+            buyButton.textContent = 'Comprar';
+
+            productCard.appendChild(productImage);
+            productCard.appendChild(productTitle);
+            productCard.appendChild(productPrice);
+            productCard.appendChild(buyButton);
+
+            catalog.appendChild(productCard);
         });
-    }
+
+        loading.style.display = 'none'; // Esconde o loading após o carregamento
+    });
+}
+
 
     // Função para aplicar o filtro de categoria
     function applyFilter(category) {

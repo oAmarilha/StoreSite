@@ -3,12 +3,12 @@ body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #e0f7fa; /* Azul claro */
+    background: rgba(3,155,229,0.04);/* Azul claro */
     color: #333;
 }
 
 header {
-    background-color: #0277bd; /* Azul escuro */
+    background: rgba(0,0,0,1);
     color: #fff;
     padding: 1rem 2rem;
     position: sticky;
@@ -38,6 +38,7 @@ header h1 {
 
 .nav-links a {
     color: white;
+    font-weight: bold;
     text-decoration: none;
     font-size: 1rem;
     transition: color 0.3s;
@@ -55,7 +56,7 @@ header h1 {
 .manage-collections-button {
     display: inline-block;
     padding: 10px 15px;
-    background-color: #007bff;
+    background-color: #555555;
     color: white;
     text-decoration: none;
     border-radius: 5px;
@@ -65,7 +66,8 @@ header h1 {
 }
 
 .manage-collections-button:hover {
-    background-color: #0056b3;
+    background-color: white;
+    color: black;
 }
 
 /* Navegação móvel */
@@ -119,7 +121,7 @@ header h1 {
 }
 
 .product-card {
-    background-color: #fff;
+    background-color: black;
     border-radius: 10px;
     box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
     overflow: hidden;
@@ -132,20 +134,20 @@ header h1 {
 
 .product-card img {
     width: 100%;
-    height: 100%; /* Altura fixa */
-    object-fit: cover; /* Corta e centraliza a imagem */
+    height: 270px; /* Altura fixa */
+    object-fit:fill; /* Preenche a imagem */
 }
 
 .product-card h2 {
     font-size: 1.5rem;
     margin: 1rem 0 0.5rem 0;
     padding: 0 1rem;
-    color: #0277bd; /* Azul escuro */
+    color: white; /* Azul escuro */
 }
 
 .product-card p {
     font-size: 1.25rem;
-    color: #555;
+    color: rgb(218, 218, 218);
     margin: 0 0 1rem 0;
     padding: 0 1rem;
 }
@@ -154,8 +156,9 @@ header h1 {
     display: block;
     text-align: center;
     padding: 0.75rem;
-    background-color: #039be5; /* Azul médio */
-    color: white;
+    background: rgb(0, 170, 255); /* Azul médio */
+    font-weight: bold;
+    color: black;
     text-decoration: none;
     border-radius: 0 0 10px 10px;
     transition: background-color 0.3s;
@@ -180,7 +183,6 @@ header h1 {
     position: absolute; /* Posiciona o contêiner de mensagem em relação ao grid */
     top: 0;
     left: 0;
-    background-color: #e0f7fa; /* Mesmo fundo da página para harmonizar */
     z-index: 10; /* Certifique-se de que a mensagem está acima do grid */
 }
 
@@ -200,10 +202,44 @@ header h1 {
     .mobile-nav-toggle {
         display: block; /* Mostra o botão de navegação móvel */
     }
-}
 
-@media (max-width: 768px) {
+    .product-card img {
+        width: 100%;
+        height: 350px; /* Altura fixa */
+        object-fit:fill; /* Preenche a imagem */
+    }
+
     .catalog {
         padding: 1rem; /* Ajusta o padding para telas menores */
     }
+}
+
+/* Estilo do contêiner de loading */
+.loading {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10000;
+    display: none; /* Escondido por padrão */
+}
+
+/* Estilo do spinner */
+.spinner {
+    border: 8px solid #f3f3f3;
+    border-top: 8px solid #007BFF;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }

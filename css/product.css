@@ -2,12 +2,12 @@ body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #e0f7fa; /* Azul claro */
+    background: rgba(3,155,229,0.04);/* Azul claro */
     color: #333;
 }
 
 header {
-    background-color: #0277bd; /* Azul escuro */
+    background: rgba(0,0,0,1);
     color: #fff;
     padding: 1rem 2rem;
     position: sticky;
@@ -48,7 +48,7 @@ header a {
 .product-images img {
     max-width: 300px; /* Tamanho máximo das imagens */
     max-height: 300px; /* Altura máxima das imagens */
-    object-fit: cover; /* Mantém a proporção da imagem e cobre o espaço */
+    object-fit: fill; /* Mantém a proporção da imagem e cobre o espaço */
     cursor: pointer;
     transition: transform 0.3s ease; /* Adiciona uma animação ao passar o mouse */
 }
@@ -117,4 +117,34 @@ header a {
 
 .next-button {
     right: 10px;
+}
+
+/* Estilo do contêiner de loading */
+.loading {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10000;
+    display: none; /* Escondido por padrão */
+}
+
+/* Estilo do spinner */
+.spinner {
+    border: 8px solid #f3f3f3;
+    border-top: 8px solid #007BFF;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }
