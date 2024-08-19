@@ -5,6 +5,7 @@
     display: flex;
     flex-direction: row;
     transition: height 250ms ease;
+    align-items: center;
 }
 /*.new-header__left*/
 .new-header__left {
@@ -299,7 +300,7 @@ header h1 {
     left: 32px;
     background-color: #1981CD;
     width: 314px !important;
-    height: 48px;
+    height: 40px;
     display: flex;
     color: white;
     align-items: center;
