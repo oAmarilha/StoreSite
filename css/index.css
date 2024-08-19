@@ -154,7 +154,7 @@ header h1 {
 }
 
 
-/* Estilo para o catálogo */
+/* Estilo para o catálogo  */
 .catalog {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
