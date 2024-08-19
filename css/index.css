@@ -1,3 +1,42 @@
+
+/* new-header */
+.new-header__inner {
+    height: 48px;
+    display: flex;
+    flex-direction: row;
+    transition: height 250ms ease;
+}
+/*.new-header__left*/
+.new-header__left {
+    min-width: 378px;
+    max-width: 378px;
+}
+/*new-header__right*/
+.new-header__right {
+    display: flex;
+    flex-direction: row;
+    flex-grow: 1;
+    justify-content: end;
+    box-sizing: border-box;
+}
+/*new-header__mobile-flyout*/
+.new-header__mobile-flyout {
+    background: rgba(0, 0, 0, 0);
+    position: static;
+    width: auto;
+    height: auto;
+    overflow: visible;
+    opacity: 1;
+    transform: none;
+    pointer-events: auto;
+}
+/*header-content-wrapper*/
+.header-content-wrapper {
+    background: #000;
+    position: relative;
+    z-index: 502;
+}
+
 /* Geral */
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -10,9 +49,11 @@ body {
 header {
     background: rgba(0,0,0,1);
     color: #fff;
-    padding: 1rem 2rem;
+    /* Ajuste a espessura da barra aqui */
+    padding:0; /* Exemplo: 0.5rem */
     position: sticky;
     top: 0;
+    left: 0;
     z-index: 1000;
 }
 
@@ -20,7 +61,9 @@ header nav {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin: 13.5px;
 }
+
 
 header h1 {
     font-size: 1.5rem;
@@ -61,8 +104,9 @@ header h1 {
     text-decoration: none;
     border-radius: 5px;
     font-weight: bold;
+    align-items: center;
     transition: background-color 0.3s;
-    margin: 0; /* Remove margens para garantir centralização */
+    margin: 3px 20px; /* Remove margens para garantir centralização */
 }
 
 .manage-collections-button:hover {

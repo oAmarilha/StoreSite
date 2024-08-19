@@ -9,40 +9,47 @@
 </head>
 <body>
     <header>
-        <nav>
-            <!--Bem vindo-->
-            <h3>
-             <div class="Nome">
-                 <div class="wrapper">
+        <!--new-header-->
+        <div class="new-header__inner">
+            <div class="new-header__left"></div>
+            <!--Bem vindo--> 
+            <div class="Nome">
+                <div class="wrapper">
                     <div class="typing-demo">
-                     Bem vindo.
+                        Bem vindo.
                     </div>
                 </div>
-             </div>
-            </h3>
-            <div class="mobile-nav-toggle">
-                &#9776; <!-- Ícone de menu -->
+            </div> 
+            <div class="new-header__mobile-flyout"> 
+                <nav>
+
+                    <div class="mobile-nav-toggle">
+                        &#9776; <!-- Ícone de menu -->
+                    </div>
+                    <ul class="nav-links">
+                        <li><a href="#" data-category="all">Todos</a></li>
+                        <li><a href="#" data-category="Camisetas">Camisetas</a></li>
+                        <li><a href="#" data-category="Calças">Calças</a></li>
+                        <li><a href="#" data-category="Tênis">Tênis</a></li>
+                        <li><a href="#" data-category="Mochilas">Mochilas</a></li>
+                        <li><a href="#" data-category="Jaquetas">Jaquetas</a></li>
+                    </ul>
+                    <!-- Botão separado para gerenciar coleções -->
+                    <ul class="mobile-nav-links">
+                        <li><a href="#" data-category="all">Todos</a></li>
+                        <li><a href="#" data-category="Camisetas">Camisetas</a></li>
+                        <li><a href="#" data-category="Calças">Calças</a></li>
+                        <li><a href="#" data-category="Tênis">Tênis</a></li>
+                        <li><a href="#" data-category="Mochilas">Mochilas</a></li>
+                        <li><a href="#" data-category="Jaquetas">Jaquetas</a></li>
+                        <li><a href="upload.html" class="manage-link">Gerenciar Coleções</a></li>
+                    </ul>
+                </nav>
             </div>
-            <ul class="nav-links">
-                <li><a href="#" data-category="all">Todos</a></li>
-                <li><a href="#" data-category="Camisetas">Camisetas</a></li>
-                <li><a href="#" data-category="Calças">Calças</a></li>
-                <li><a href="#" data-category="Tênis">Tênis</a></li>
-                <li><a href="#" data-category="Mochilas">Mochilas</a></li>
-                <li><a href="#" data-category="Jaquetas">Jaquetas</a></li>
-            </ul>
-            <!-- Botão separado para gerenciar coleções -->
-            <a href="upload.html" class="manage-collections-button">Gerenciar Coleções</a>
-            <ul class="mobile-nav-links">
-                <li><a href="#" data-category="all">Todos</a></li>
-                <li><a href="#" data-category="Camisetas">Camisetas</a></li>
-                <li><a href="#" data-category="Calças">Calças</a></li>
-                <li><a href="#" data-category="Tênis">Tênis</a></li>
-                <li><a href="#" data-category="Mochilas">Mochilas</a></li>
-                <li><a href="#" data-category="Jaquetas">Jaquetas</a></li>
-                <li><a href="upload.html" class="manage-link">Gerenciar Coleções</a></li>
-            </ul>
-        </nav>
+            <div class="new-header__right">
+                <a href="upload.html" class="manage-collections-button">Gerenciar Coleções</a>
+            </div>
+        </div>
     </header>    
     <main>
         <div id="catalog" class="catalog"></div>
