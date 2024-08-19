@@ -320,7 +320,7 @@ header h1 {
   }
   
   .typing-demo {
-    width: 10ch;
+    width: 12ch;
     animation: typing 2s steps(10), blink .5s step-end infinite alternate;
     white-space: nowrap;
     overflow: hidden;
