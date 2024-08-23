@@ -297,17 +297,43 @@ header h1 {
 .Nome {
     position: fixed;
     top: 24px;
-    left: 32px;
-    background-color: #1981CD;
+    left: 38%;
+    background-color: #fff;
     width: 314px !important;
-    height: 40px;
+    height: auto;
     display: flex;
-    color: white;
     align-items: center;
     padding: 4px;
     border-radius: 10px;
     z-index: 2022;
-    box-shadow: #fcfeff;
+    box-shadow: 0 3px 7px 1px rgba(0, 0, 0, .16);
+}
+
+/*bloco*/
+element.style {
+    width: 33%;
+}
+/*cor bloco*/
+.cor-bloco{
+    border-radius: 10px;
+    background: #b51f29;
+    box-shadow: 1px 3px 7px 1px rgba(51, 51, 51, .16);
+}
+/*letra bloco*/
+.letra-boloco-selecionado{
+
+    color:#fff
+}
+.letra-boloco{
+
+    color: #000;
+}
+.Margem-letra{
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
 }
 
 /*Animacao*/
@@ -318,14 +344,15 @@ header h1 {
     display: grid;
     place-items: center;
   }
-  
+
+  @import url('https://fonts.googleapis.com/css2?family=Gruppo&family=Nixie+One&family=Unbounded:wght@200&display=swap');
   .typing-demo {
     width: 12ch;
     animation: typing 2s steps(10), blink .5s step-end infinite alternate;
     white-space: nowrap;
     overflow: hidden;
     border-right: 3px solid;
-    font-family: monospace;
+    font-family: "Unbounded", sans-serif;
     font-size: 2em;
   }
   
