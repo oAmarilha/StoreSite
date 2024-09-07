@@ -316,7 +316,7 @@ element.style {
 /*cor bloco*/
 .cor-bloco{
     border-radius: 10px;
-    background: #b51f29;
+    background: black;
     box-shadow: 1px 3px 7px 1px rgba(51, 51, 51, .16);
 }
 /*letra bloco*/
