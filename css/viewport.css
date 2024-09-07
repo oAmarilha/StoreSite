@@ -51,7 +51,7 @@ body {
     display: flex;
     flex-direction: column;
     gap: 10px;
-    width: 70%; /* Ajuste conforme necessário */
+    width: 60%; /* Ajuste conforme necessário */
     margin: 0 auto; /* Centraliza o container da imagem */
 }
 
