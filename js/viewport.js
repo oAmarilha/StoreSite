@@ -50,6 +50,10 @@ async function displayProductImages() {
     if (name) {
         const product = await fetchProductByName(name);
         if (product) {
+            const title = document.getElementById('title')
+            title.textContent = product.name;
+            const price = document.getElementById('price');
+            price.textContent = `R$ ${product.price.toFixed(2)}`;
             const topImagesContainer = document.querySelector('.top-images');
             const bottomImagesContainer = document.querySelector('.bottom-images');
             
