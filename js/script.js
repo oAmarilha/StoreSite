@@ -63,7 +63,7 @@ function renderProducts(filterCategory = 'all') {
             productImage.addEventListener('click', () => {
                 const category = encodeURIComponent(product.category);
                 const name = encodeURIComponent(product.name);
-                window.location.href = `product.html?category=${category}&name=${name}`;
+                window.location.href = `viewport.html?category=${category}&name=${name}`;
             });
 
             const productTitle = document.createElement('h2');

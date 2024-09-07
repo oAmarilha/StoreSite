@@ -180,7 +180,7 @@ header h1 {
 .product-card img {
     width: 100%;
     height: 270px; /* Altura fixa */
-    object-fit:fill; /* Preenche a imagem */
+    flex: 0 0 auto; /* Garante que as imagens não sejam redimensionadas */
 }
 
 .product-card h2 {
