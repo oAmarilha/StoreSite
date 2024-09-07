@@ -60,9 +60,9 @@ function renderProducts(filterCategory = 'all') {
             productImage.src = product.images.length > 0 ? product.images[0] : ''; 
             productImage.alt = product.name;
             productImage.style.cursor = 'pointer';
+            const category = encodeURIComponent(product.category);
+            const name = encodeURIComponent(product.name);
             productImage.addEventListener('click', () => {
-                const category = encodeURIComponent(product.category);
-                const name = encodeURIComponent(product.name);
                 window.location.href = `viewport.html?category=${category}&name=${name}`;
             });
 
@@ -73,8 +73,8 @@ function renderProducts(filterCategory = 'all') {
             productPrice.textContent = `R$ ${product.price.toFixed(2)}`;
 
             const buyButton = document.createElement('a');
-            buyButton.href = `https://wa.me/5519971342856?text=Olá, gostaria de comprar a ${product.name}.`;
-            buyButton.target = "_blank";
+            buyButton.href = `viewport.html?category=${category}&name=${name}`;
+            buyButton.target = "_self";
             buyButton.classList.add('buy-button');
             buyButton.textContent = 'Comprar';
 
