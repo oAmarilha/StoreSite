@@ -71,6 +71,7 @@ body {
 
 .product-images .bottom-images {
     display: flex;
+    margin-left: 16.5%;
     gap: 10px;
     flex-wrap: nowrap;
     overflow-x: auto; /* Adiciona rolagem horizontal se necessário */
@@ -78,7 +79,7 @@ body {
     scroll-behavior: smooth; /* Rolagem suave */
     padding-bottom: 10px; /* Espaço extra abaixo para o scroll */
     box-sizing: border-box; /* Inclui padding e border no cálculo da largura */
-    width: calc(100% - 50px); /* Largura ajustada para as setas de navegação */
+    width: 710px; /* Largura ajustada para as setas de navegação */
 }
 
 /* Imagens na parte superior */
@@ -89,8 +90,8 @@ body {
 
 /* Imagens na parte inferior */
 .product-images .bottom-images img {
-    height: 250px; /* Ajuste a altura conforme necessário */
-    width: 250px; /* Ajuste a largura conforme necessário */
+    height: 230px; /* Ajuste a altura conforme necessário */
+    width: 230px; /* Ajuste a largura conforme necessário */
     flex: 0 0 auto; /* Garante que as imagens não sejam redimensionadas */
 }
 
