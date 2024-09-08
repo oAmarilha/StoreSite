@@ -368,14 +368,20 @@ element.style {
     }
   }
 
-
-  .banner {
+/* Banner styles */
+.banner {
     position: relative;
-    width: 100%;
-    height: 450px;
+    width: 90%; /* Set width to 90% of parent container */
+    height: 450px; /* Set height to 450px */
+    margin: 40px auto 0; /* Center horizontally */
+    display: flex;
+    align-items: center; /* Center images vertically */
+    justify-content: center; /* Center images horizontally */
     overflow: hidden;
+    box-sizing: border-box;
 }
 
+/* Image styles with smooth transition */
 .banner img {
     width: 100%;
     height: 100%;
@@ -383,23 +389,63 @@ element.style {
     position: absolute;
     top: 0;
     left: 0;
+    opacity: 0;
+    transition: opacity 1s ease-in-out; /* Smooth fade effect */
 }
 
-.banner button {
+.banner img.fade {
+    opacity: 1;
+}
+
+/* Arrows for navigation */
+.arrow {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
     background-color: rgba(0, 0, 0, 0.5);
     color: white;
     border: none;
+    font-size: 2rem;
     padding: 10px;
+    cursor: pointer;
+    z-index: 10;
+}
+
+.arrow.prev {
+    left: 10px; /* Place the arrow inside the banner */
+}
+
+.arrow.next {
+    right: 10px; /* Place the arrow inside the banner */
+}
+
+.arrow:hover {
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+/* Dots for navigation */
+.dots-container {
+    position: absolute;
+    bottom: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 10px;
+}
+
+.dot {
+    width: 12px;
+    height: 12px;
+    background-color: rgba(255, 255, 255, 0.5);
+    border-radius: 50%;
     cursor: pointer;
 }
 
-.banner button:nth-of-type(1) {
-    left: 10px;
+.dot.active {
+    background-color: white;
 }
 
-.banner button:nth-of-type(2) {
-    right: 10px;
+.dot:hover {
+    background-color: rgba(255, 255, 255, 0.8);
 }
+

@@ -160,90 +160,123 @@ function renderProducts(filterCategory = 'all') {
 
     const bannerDiv = document.querySelector('.banner');
 
-    // Fetch banner images from Firestore
-    async function fetchBannerImages() {
-        const bannerCollection = collection(db, 'banner');
-        const querySnapshot = await getDocs(bannerCollection);
-        const imageUrls = [];
+// Fetch banner images from Firestore
+async function fetchBannerImages() {
+    const bannerCollection = collection(db, 'banner');
+    const querySnapshot = await getDocs(bannerCollection);
+    const imageUrls = [];
 
-        for (const doc of querySnapshot.docs) {
-            const data = doc.data();
-            
-            // Check if imagePath is an array or a single string
-            let imagePaths = [];
-            
-            if (Array.isArray(data.imagePath)) {
-                // If it's an array, use it directly
-                imagePaths = data.imagePath;
-            } else if (typeof data.imagePath === 'string') {
-                // If it's a string, handle it as a single image path
-                imagePaths = [data.imagePath];
-            }
-
-            // Process each imagePath
-            for (const imagePath of imagePaths) {
-                try {
-                    const imageRef = ref(storage, imagePath.trim()); // Trim any extra spaces
-                    const imageUrl = await getDownloadURL(imageRef);
-                    imageUrls.push(imageUrl);
-                } catch (error) {
-                    console.error("Error fetching image URL:", error);
-                }
-            }
+    for (const doc of querySnapshot.docs) {
+        const data = doc.data();
+        
+        let imagePaths = [];
+        if (Array.isArray(data.imagePath)) {
+            imagePaths = data.imagePath;
+        } else if (typeof data.imagePath === 'string') {
+            imagePaths = [data.imagePath];
         }
 
-        return imageUrls;
+        for (const imagePath of imagePaths) {
+            try {
+                const imageRef = ref(storage, imagePath.trim());
+                const imageUrl = await getDownloadURL(imageRef);
+                imageUrls.push(imageUrl);
+            } catch (error) {
+                console.error("Error fetching image URL:", error);
+            }
+        }
     }
 
+    return imageUrls;
+}
 
-    // Render banner images with automatic scrolling
-    async function renderBanner() {
-        const imageUrls = await fetchBannerImages();
+// Render banner images with smooth transitions
+async function renderBanner() {
+    const imageUrls = await fetchBannerImages();
 
-        if (imageUrls.length === 0) {
-            bannerDiv.innerHTML = '<p>No banners available</p>';
-            return;
+    if (imageUrls.length === 0) {
+        bannerDiv.innerHTML = '<p>No banners available</p>';
+        return;
+    }
+
+    let currentIndex = 0;
+    let autoSlideInterval;
+
+    // Create image elements and set initial opacity
+    imageUrls.forEach((url, index) => {
+        const img = document.createElement('img');
+        img.src = url;
+        img.style.opacity = index === 0 ? '1' : '0';
+        img.classList.add('banner-image', 'fade');
+        bannerDiv.appendChild(img);
+    });
+
+    const images = bannerDiv.querySelectorAll('.banner-image');
+
+    // Function to show a specific image with a fade effect
+    function showImage(index) {
+        images[currentIndex].style.opacity = '0'; // Fade out the current image
+        currentIndex = index;
+        images[currentIndex].style.opacity = '1'; // Fade in the next image
+        updateDots();
+    }
+
+    // Function to show the next image
+    function showNextImage() {
+        showImage((currentIndex + 1) % imageUrls.length);
+    }
+
+    // Function to show the previous image
+    function showPreviousImage() {
+        showImage((currentIndex - 1 + imageUrls.length) % imageUrls.length);
+    }
+
+    // Create dots for navigation
+    const dotsContainer = document.createElement('div');
+    dotsContainer.classList.add('dots-container');
+    imageUrls.forEach((_, index) => {
+        const dot = document.createElement('span');
+        dot.classList.add('dot');
+        if (index === 0) {
+            dot.classList.add('active');
         }
+        dot.addEventListener('click', () => showImage(index));
+        dotsContainer.appendChild(dot);
+    });
+    bannerDiv.appendChild(dotsContainer);
 
-        let currentIndex = 0;
-
-        // Create image elements
-        imageUrls.forEach((url, index) => {
-            const img = document.createElement('img');
-            img.src = url;
-            img.style.display = index === 0 ? 'block' : 'none';
-            img.classList.add('banner-image');
-            bannerDiv.appendChild(img);
+    // Update dot appearance based on the current image
+    function updateDots() {
+        const dots = dotsContainer.querySelectorAll('.dot');
+        dots.forEach((dot, index) => {
+            dot.classList.toggle('active', index === currentIndex);
         });
-
-        // Function to show the next image
-        function showNextImage() {
-            bannerDiv.querySelectorAll('.banner-image')[currentIndex].style.display = 'none';
-            currentIndex = (currentIndex + 1) % imageUrls.length;
-            bannerDiv.querySelectorAll('.banner-image')[currentIndex].style.display = 'block';
-        }
-
-        // Function to show the previous image
-        function showPreviousImage() {
-            bannerDiv.querySelectorAll('.banner-image')[currentIndex].style.display = 'none';
-            currentIndex = (currentIndex - 1 + imageUrls.length) % imageUrls.length;
-            bannerDiv.querySelectorAll('.banner-image')[currentIndex].style.display = 'block';
-        }
-
-        // Automatic scrolling
-        setInterval(showNextImage, 5000); // Change every 5 seconds
-
-        // User controls for next and previous
-        const nextButton = document.createElement('button');
-        nextButton.textContent = 'Next';
-        nextButton.addEventListener('click', showNextImage);
-        bannerDiv.appendChild(nextButton);
-
-        const prevButton = document.createElement('button');
-        prevButton.textContent = 'Previous';
-        prevButton.addEventListener('click', showPreviousImage);
-        bannerDiv.appendChild(prevButton);
     }
 
-    renderBanner();
+    // Automatic scrolling
+    autoSlideInterval = setInterval(showNextImage, 7000);
+
+    // User controls for next and previous
+    const nextButton = document.createElement('button');
+    nextButton.classList.add('arrow', 'next');
+    nextButton.innerHTML = '&#9654;'; // Right arrow symbol
+    nextButton.addEventListener('click', () => {
+        clearInterval(autoSlideInterval); // Stop auto-slide when user interacts
+        showNextImage();
+        autoSlideInterval = setInterval(showNextImage, 7000); // Restart auto-slide
+    });
+    bannerDiv.appendChild(nextButton);
+
+    const prevButton = document.createElement('button');
+    prevButton.classList.add('arrow', 'prev');
+    prevButton.innerHTML = '&#9664;'; // Left arrow symbol
+    prevButton.addEventListener('click', () => {
+        clearInterval(autoSlideInterval);
+        showPreviousImage();
+        autoSlideInterval = setInterval(showNextImage, 7000);
+    });
+    bannerDiv.appendChild(prevButton);
+}
+
+renderBanner();
 });
