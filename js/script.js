@@ -157,4 +157,93 @@ function renderProducts(filterCategory = 'all') {
     mobileNavToggle.addEventListener('click', () => {
         toggleMobileNav();
     });
+
+    const bannerDiv = document.querySelector('.banner');
+
+    // Fetch banner images from Firestore
+    async function fetchBannerImages() {
+        const bannerCollection = collection(db, 'banner');
+        const querySnapshot = await getDocs(bannerCollection);
+        const imageUrls = [];
+
+        for (const doc of querySnapshot.docs) {
+            const data = doc.data();
+            
+            // Check if imagePath is an array or a single string
+            let imagePaths = [];
+            
+            if (Array.isArray(data.imagePath)) {
+                // If it's an array, use it directly
+                imagePaths = data.imagePath;
+            } else if (typeof data.imagePath === 'string') {
+                // If it's a string, handle it as a single image path
+                imagePaths = [data.imagePath];
+            }
+
+            // Process each imagePath
+            for (const imagePath of imagePaths) {
+                try {
+                    const imageRef = ref(storage, imagePath.trim()); // Trim any extra spaces
+                    const imageUrl = await getDownloadURL(imageRef);
+                    imageUrls.push(imageUrl);
+                } catch (error) {
+                    console.error("Error fetching image URL:", error);
+                }
+            }
+        }
+
+        return imageUrls;
+    }
+
+
+    // Render banner images with automatic scrolling
+    async function renderBanner() {
+        const imageUrls = await fetchBannerImages();
+
+        if (imageUrls.length === 0) {
+            bannerDiv.innerHTML = '<p>No banners available</p>';
+            return;
+        }
+
+        let currentIndex = 0;
+
+        // Create image elements
+        imageUrls.forEach((url, index) => {
+            const img = document.createElement('img');
+            img.src = url;
+            img.style.display = index === 0 ? 'block' : 'none';
+            img.classList.add('banner-image');
+            bannerDiv.appendChild(img);
+        });
+
+        // Function to show the next image
+        function showNextImage() {
+            bannerDiv.querySelectorAll('.banner-image')[currentIndex].style.display = 'none';
+            currentIndex = (currentIndex + 1) % imageUrls.length;
+            bannerDiv.querySelectorAll('.banner-image')[currentIndex].style.display = 'block';
+        }
+
+        // Function to show the previous image
+        function showPreviousImage() {
+            bannerDiv.querySelectorAll('.banner-image')[currentIndex].style.display = 'none';
+            currentIndex = (currentIndex - 1 + imageUrls.length) % imageUrls.length;
+            bannerDiv.querySelectorAll('.banner-image')[currentIndex].style.display = 'block';
+        }
+
+        // Automatic scrolling
+        setInterval(showNextImage, 5000); // Change every 5 seconds
+
+        // User controls for next and previous
+        const nextButton = document.createElement('button');
+        nextButton.textContent = 'Next';
+        nextButton.addEventListener('click', showNextImage);
+        bannerDiv.appendChild(nextButton);
+
+        const prevButton = document.createElement('button');
+        prevButton.textContent = 'Previous';
+        prevButton.addEventListener('click', showPreviousImage);
+        bannerDiv.appendChild(prevButton);
+    }
+
+    renderBanner();
 });
