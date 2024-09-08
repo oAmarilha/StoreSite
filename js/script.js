@@ -3,11 +3,10 @@ import { collection, getDocs, query } from 'https://www.gstatic.com/firebasejs/9
 import { ref, getDownloadURL } from 'https://www.gstatic.com/firebasejs/9.20.0/firebase-storage.js';
 
 document.addEventListener("DOMContentLoaded", function() {
+    const loading = document.getElementById('loading');
+    loading.style.display = 'flex'; // Mostra o loading
     const catalog = document.getElementById('catalog');
-    const navLinks = document.querySelectorAll('.nav-links a');
-    const mobileNavLinks = document.querySelectorAll('.mobile-nav-links a');
-    const mobileNavToggle = document.querySelector('.mobile-nav-toggle');
-    const noProductsMessageContainer = document.querySelector('.no-products-message-container');
+    const navLinks = document.querySelectorAll('.dropdown-content');
 
     // Função para buscar todos os produtos do Firestore
     async function fetchAllProducts() {
@@ -37,65 +36,71 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     // Função para renderizar produtos no catálogo
-function renderProducts(filterCategory = 'all') {
-    const loading = document.getElementById('loading');
-    catalog.innerHTML = ''; // Limpa o catálogo
-    noProductsMessageContainer.style.display = 'none'; // Esconde a mensagem de nenhum produto
-    loading.style.display = 'flex'; // Mostra o loading
-
-    fetchAllProducts().then(products => {
-        const filteredProducts = filterCategory === 'all' ?
-            products :
-            products.filter(product => product.category === filterCategory);
-
-        if (filteredProducts.length === 0) {
-            noProductsMessageContainer.style.display = 'flex'; // Mostra a mensagem se não houver produtos
-        }
-
-        filteredProducts.forEach(product => {
-            const productCard = document.createElement('div');
-            productCard.classList.add('product-card');
-
-            const productImage = document.createElement('img');
-            productImage.src = product.images.length > 0 ? product.images[0] : ''; 
-            productImage.alt = product.name;
-            productImage.style.cursor = 'pointer';
-            const category = encodeURIComponent(product.category);
-            const name = encodeURIComponent(product.name);
-            productImage.addEventListener('click', () => {
-                window.location.href = `viewport.html?category=${category}&name=${name}`;
-            });
-
-            const productTitle = document.createElement('h2');
-            productTitle.textContent = product.name;
-
-            const productPrice = document.createElement('p');
-            productPrice.textContent = `R$ ${product.price.toFixed(2)}`;
-
-            const buyButton = document.createElement('a');
-            buyButton.href = `viewport.html?category=${category}&name=${name}`;
-            buyButton.target = "_self";
-            buyButton.classList.add('buy-button');
-            buyButton.textContent = 'Comprar';
-
-            productCard.appendChild(productImage);
-            productCard.appendChild(productTitle);
-            productCard.appendChild(productPrice);
-            productCard.appendChild(buyButton);
-
-            catalog.appendChild(productCard);
+    function renderProducts(filterCategory = 'all') {
+        catalog.innerHTML = ''; // Limpa o catálogo
+        loading.style.display = 'flex'; // Mostra o loading
+    
+        fetchAllProducts().then(products => {
+            const filteredProducts = filterCategory === 'all' ?
+                products :
+                products.filter(product => product.category === filterCategory);
+            
+            // Cria o elemento da mensagem se ainda não existir
+            let noProductsMessage = document.querySelector('.no-products-message');
+            if (!noProductsMessage) {
+                noProductsMessage = document.createElement('div');
+                noProductsMessage.classList.add('no-products-message');
+                noProductsMessage.textContent = 'Nenhum produto encontrado.';
+                catalog.appendChild(noProductsMessage); // Adiciona ao DOM dentro do catálogo
+            }
+    
+            // Atualiza a visibilidade da mensagem
+            if (filteredProducts.length === 0) {
+                noProductsMessage.style.display = 'block'; // Exibe a mensagem
+            } else {
+                noProductsMessage.style.display = 'none'; // Esconde a mensagem
+                filteredProducts.forEach(product => {
+                    const productCard = document.createElement('div');
+                    productCard.classList.add('product-card');
+    
+                    const productImage = document.createElement('img');
+                    productImage.src = product.images.length > 0 ? product.images[0] : ''; 
+                    productImage.alt = product.name;
+                    productImage.style.cursor = 'pointer';
+                    const category = encodeURIComponent(product.category);
+                    const name = encodeURIComponent(product.name);
+                    productImage.addEventListener('click', () => {
+                        window.location.href = `viewport.html?category=${category}&name=${name}`;
+                    });
+    
+                    const productTitle = document.createElement('h2');
+                    productTitle.textContent = product.name;
+    
+                    const productPrice = document.createElement('p');
+                    productPrice.textContent = `R$ ${product.price.toFixed(2)}`;
+    
+                    const buyButton = document.createElement('a');
+                    buyButton.href = `viewport.html?category=${category}&name=${name}`;
+                    buyButton.target = "_self";
+                    buyButton.classList.add('buy-button');
+                    buyButton.textContent = 'Comprar';
+    
+                    productCard.appendChild(productImage);
+                    productCard.appendChild(productTitle);
+                    productCard.appendChild(productPrice);
+                    productCard.appendChild(buyButton);
+    
+                    catalog.appendChild(productCard);
+                });
+            }
+            loading.style.display = 'none'; // Esconde o loading após o carregamento
         });
-
-        loading.style.display = 'none'; // Esconde o loading após o carregamento
-    });
-}
-
-
+    }
+    
     // Função para aplicar o filtro de categoria
     function applyFilter(category) {
         renderProducts(category);
         setActiveLink(category);
-        closeMobileNav();
     }
 
     // Função para definir o link ativo na navegação
@@ -107,28 +112,7 @@ function renderProducts(filterCategory = 'all') {
                 link.classList.remove('active');
             }
         });
-
-        mobileNavLinks.forEach(link => {
-            if (link.getAttribute('data-category') === category) {
-                link.classList.add('active');
-            } else {
-                link.classList.remove('active');
-            }
-        });
     }
-
-    // Função para abrir/fechar o menu móvel
-    function toggleMobileNav() {
-        const mobileNav = document.querySelector('.mobile-nav-links');
-        mobileNav.classList.toggle('open');
-    }
-
-    // Função para fechar o menu móvel
-    function closeMobileNav() {
-        const mobileNav = document.querySelector('.mobile-nav-links');
-        mobileNav.classList.remove('open');
-    }
-
     // Inicializa o catálogo com todos os produtos
     renderProducts();
 
@@ -140,24 +124,6 @@ function renderProducts(filterCategory = 'all') {
             applyFilter(category);
         });
     });
-
-    // Adiciona eventos de clique aos links de navegação móvel para aplicar o filtro
-    mobileNavLinks.forEach(link => {
-        link.addEventListener('click', (event) => {
-            if (link.classList.contains('manage-link')) {
-                return; // Ignora o link "Gerenciar Coleções"
-            }
-            event.preventDefault();
-            const category = event.target.getAttribute('data-category');
-            applyFilter(category);
-        });
-    });
-
-    // Adiciona evento de clique para o botão de alternar menu móvel
-    mobileNavToggle.addEventListener('click', () => {
-        toggleMobileNav();
-    });
-
     const bannerDiv = document.querySelector('.banner');
 
 // Fetch banner images from Firestore

@@ -3,34 +3,32 @@
 .new-header__inner {
     height: 48px;
     display: flex;
-    flex-direction: row;
-    transition: height 250ms ease;
     align-items: center;
+    justify-content: space-between;
 }
-/*.new-header__left*/
-.new-header__left {
-    min-width: 378px;
-    max-width: 378px;
-}
-/*new-header__right*/
+.new-header__left,
 .new-header__right {
+    flex: 1; /* Faz com que cada um ocupe uma parte igual do espaço disponível */
+    display: flex; /* Se desejar que os itens dentro deles também usem flexbox */
+    align-items: center; /* Alinha os itens verticalmente no centro */
+    justify-content: center; /* Alinha os itens horizontalmente no centro */
+}
+
+/* nav-center */
+.nav-center {
     display: flex;
-    flex-direction: row;
-    flex-grow: 1;
-    justify-content: end;
-    box-sizing: border-box;
+    position: relative;
+    justify-content: center;
+    align-items: center;
+    top: 50%;
+    background-color: #fff;
+    width: 314px !important;
+    padding: 4px;
+    border-radius: 10px;
+    z-index: 2022;
+    box-shadow: 0 3px 7px 1px rgba(0, 0, 0, .16);
 }
-/*new-header__mobile-flyout*/
-.new-header__mobile-flyout {
-    background: rgba(0, 0, 0, 0);
-    position: static;
-    width: auto;
-    height: auto;
-    overflow: visible;
-    opacity: 1;
-    transform: none;
-    pointer-events: auto;
-}
+
 /*header-content-wrapper*/
 .header-content-wrapper {
     background: #000;
@@ -115,52 +113,13 @@ header h1 {
     color: black;
 }
 
-/* Navegação móvel */
-.mobile-nav-toggle {
-    display: none; /* Oculta o botão por padrão */
-    cursor: pointer;
-    font-size: 1.5rem;
-    color: #fff;
-}
-
-.mobile-nav-links {
-    display: none;
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    position: absolute;
-    top: 100%;
-    right: 0;
-    background-color: rgb(59, 59, 59); /* Azul escuro */
-    width: 100vw; /* Largura total da viewport */
-    max-width: 300px; /* Largura máxima para o menu */
-    z-index: 1000;
-}
-
-.mobile-nav-links.open {
-    display: block; /* Mostra o menu quando a classe open é aplicada */
-}
-
-.mobile-nav-links a {
-    display: block;
-    padding: 1rem;
-    color: #fff;
-    text-decoration: none;
-    font-size: 1rem;
-}
-
-.mobile-nav-links a:hover {
-    background-color: #004c8c; /* Azul mais escuro para hover */
-}
-
-
 /* Estilo para o catálogo  */
 .catalog {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     gap: 2rem;
     padding: 2rem;
-    max-width: 1500px;
+    max-width: 90%;
     margin: 0 auto;
     position: relative; /* Para o posicionamento do contêiner de mensagem */
 }
@@ -218,50 +177,17 @@ header h1 {
     box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
 }
 
-/* Mensagem quando não há produtos */
-.no-products-message-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh; /* Altura total da viewport */
-    width: 100%; /* Largura total do contêiner */
-    position: absolute; /* Posiciona o contêiner de mensagem em relação ao grid */
-    top: 0;
-    left: 0;
-    z-index: 10; /* Certifique-se de que a mensagem está acima do grid */
-}
-
 .no-products-message {
+    display: none; /* Inicialmente escondido */
     text-align: center;
-    color: #666; /* Cor cinza para a mensagem */
-    font-size: 1.25rem;
-    margin: 0;
+    font-size: 1.5em;
+    color: #777;
+    position: absolute; /* Para centralizar dentro da div do catálogo */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 
-/* Responsividade */
-@media (max-width: 768px) {
-    .nav-links {
-        display: none; /* Oculta a navegação principal em telas pequenas */
-    }
-
-    .mobile-nav-toggle {
-        display: block; /* Mostra o botão de navegação móvel */
-    }
-
-    .product-card img {
-        width: 100%;
-        height: 350px; /* Altura fixa */
-        object-fit:fill; /* Preenche a imagem */
-    }
-
-    .catalog {
-        padding: 1rem; /* Ajusta o padding para telas menores */
-    }
-
-    .manage-collections-button {
-        display: none;
-    }
-}
 
 /* Estilo do contêiner de loading */
 .loading {
@@ -291,22 +217,6 @@ header h1 {
 @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
-}
-
-/* Nome */
-.Nome {
-    position: fixed;
-    top: 24px;
-    left: 38%;
-    background-color: #fff;
-    width: 314px !important;
-    height: auto;
-    display: flex;
-    align-items: center;
-    padding: 4px;
-    border-radius: 10px;
-    z-index: 2022;
-    box-shadow: 0 3px 7px 1px rgba(0, 0, 0, .16);
 }
 
 /*bloco*/
@@ -449,3 +359,40 @@ element.style {
     background-color: rgba(255, 255, 255, 0.8);
 }
 
+/* Estilo para o dropdown dentro de ALL */
+.all {
+    position: relative;
+}
+
+/* Estilo para o dropdown-content */
+.dropdown-content {
+    display: flex;
+    flex-direction: column; /* Para mostrar os itens em coluna */
+    position: absolute; /* Para posicionar o dropdown em relação ao seu elemento pai */
+    background-color: #fff; /* Cor de fundo branca */
+    width: auto; /* Largura fixa */
+    padding: 4px; /* Espaçamento interno */
+    border-radius: 10px; /* Bordas arredondadas */
+    box-shadow: 0 3px 7px 1px rgba(0, 0, 0, 0.16); /* Sombra leve */
+    z-index: 2022; /* Para garantir que o dropdown fique sobre outros elementos */
+    top: 100%; /* Posiciona o dropdown logo abaixo do elemento pai */
+    left: 0; /* Alinha o dropdown à esquerda do elemento pai */
+    display: none; /* Oculta o dropdown por padrão */
+}
+
+/* Estilo para os itens do dropdown */
+.dropdown-content a {
+    color: black; /* Texto preto */
+    text-decoration: none; /* Remove sublinhado dos links */
+    padding: 10px; /* Espaçamento interno dos itens */
+    display: block; /* Faz com que os itens ocupem toda a largura disponível */
+}
+
+/* Estilo para os itens do dropdown ao passar o mouse */
+.dropdown-content a:hover {
+    background-color: #f0f0f0; /* Cor de fundo ao passar o mouse */
+}
+
+.all:hover .dropdown-content {
+    display: block; /* Mostra o dropdown ao passar o mouse sobre ALL */
+}
