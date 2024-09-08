@@ -107,18 +107,22 @@ function closeModal() {
 function showPrevImage() {
     if (currentImageIndex > 0) {
         currentImageIndex--;
-        document.getElementById('modal-image').src = images[currentImageIndex];
-        document.getElementById('image-counter').textContent = `${currentImageIndex + 1} de ${images.length}`; // Atualiza o contador
+    } else {
+        currentImageIndex = images.length - 1; // Vai para a última imagem
     }
+    document.getElementById('modal-image').src = images[currentImageIndex];
+    document.getElementById('image-counter').textContent = `${currentImageIndex + 1} de ${images.length}`; // Atualiza o contador
 }
 
 // Função para mostrar a próxima imagem
 function showNextImage() {
     if (currentImageIndex < images.length - 1) {
         currentImageIndex++;
-        document.getElementById('modal-image').src = images[currentImageIndex];
-        document.getElementById('image-counter').textContent = `${currentImageIndex + 1} de ${images.length}`; // Atualiza o contador
+    } else {
+        currentImageIndex = 0; // Vai para a primeira imagem
     }
+    document.getElementById('modal-image').src = images[currentImageIndex];
+    document.getElementById('image-counter').textContent = `${currentImageIndex + 1} de ${images.length}`; // Atualiza o contador
 }
 
 // Adiciona eventos para os botões de navegação
