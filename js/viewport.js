@@ -95,6 +95,13 @@ function openModal(index) {
     modalImage.src = images[index];
     currentImageIndex = index;
     counter.textContent = `${currentImageIndex + 1} de ${images.length}`; // Atualiza o contador
+
+    // Adiciona evento de clique para fechar o modal ao clicar fora da imagem
+    modal.addEventListener('click', function(event) {
+        if (event.target === modal) {
+            closeModal();
+        }
+    });
 }
 
 // Função para fechar o modal
