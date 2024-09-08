@@ -119,7 +119,7 @@ header h1 {
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     gap: 2rem;
     padding: 2rem;
-    max-width: 90%;
+    max-width: 80%;
     margin: 0 auto;
     position: relative; /* Para o posicionamento do contêiner de mensagem */
 }
@@ -280,9 +280,10 @@ element.style {
 
 /* Banner styles */
 .banner {
+    display: none;
     position: relative;
-    width: 90%; /* Set width to 90% of parent container */
-    height: 450px; /* Set height to 450px */
+    width: 80%; /* Set width to 90% of parent container */
+    height: 35vh; /* Set height to 450px */
     margin: 40px auto 0; /* Center horizontally */
     display: flex;
     align-items: center; /* Center images vertically */
