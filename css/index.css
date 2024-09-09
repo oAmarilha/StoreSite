@@ -14,21 +14,6 @@
     justify-content: center; /* Alinha os itens horizontalmente no centro */
 }
 
-/* nav-center */
-.nav-center {
-    display: flex;
-    position: relative;
-    justify-content: center;
-    align-items: center;
-    top: 50%;
-    background-color: #fff;
-    width: 314px !important;
-    padding: 4px;
-    border-radius: 10px;
-    z-index: 2022;
-    box-shadow: 0 3px 7px 1px rgba(0, 0, 0, .16);
-}
-
 /*header-content-wrapper*/
 .header-content-wrapper {
     background: #000;
@@ -223,37 +208,120 @@ header h1 {
 element.style {
     width: 33%;
 }
-/*cor bloco*/
-.cor-bloco{
+/* Estilo quando a classe cor-bloco estiver ativa */
+.cor-bloco {
     border-radius: 10px;
     background: black;
     box-shadow: 1px 3px 7px 1px rgba(51, 51, 51, .16);
+    transition: background 0.3s ease, box-shadow 0.3s ease; /* Transição suave para o fundo e sombra */
 }
-/*letra bloco*/
-.letra-boloco-selecionado{
 
-    color:#fff
+/* A cor do texto muda para branco quando cor-bloco está presente */
+.cor-bloco .letra-boloco, 
+.cor-bloco .letra-boloco-selecionado {
+    color: #fff !important;
+    transition: color 0.3s ease; /* Transição suave para a cor do texto */
 }
-.letra-boloco{
 
+/* Cor padrão quando a classe cor-bloco não está ativa */
+.letra-boloco, 
+.letra-boloco-selecionado {
+    color: #000;
+    transition: color 0.3s ease; /* Transição suave para a cor do texto */
+}
+
+/* nav-center */
+.nav-center {
+    display: flex;
+    position: relative;
+    justify-content: center;
+    align-items: center;
+    top: 50%;
+    background-color: #fff;
+    width: 314px !important;
+    padding: 4px;
+    border-radius: 10px;
+    z-index: 2022;
+    box-shadow: 0 3px 7px 1px rgba(0, 0, 0, .16);
+}
+
+/* Opacidade padrão para os elementos sem hover */
+.nav-center > div {
+    opacity: 1; /* Mantemos a opacidade padrão em 1 */
+}
+
+/* Quando o hover está ativo ou a classe cor-bloco está ativa */
+.nav-center > div:hover,
+.cor-bloco {
+    opacity: 1; /* Garante que a opacidade do fundo seja mantida */
+}
+
+/* Estilo para o dropdown dentro de ALL */
+.all {
+    position: relative;
+}
+
+/* Estilo para o dropdown-content */
+.dropdown-content {
+    display: flex;
+    flex-direction: column; /* Para mostrar os itens em coluna */
+    position: absolute; /* Para posicionar o dropdown em relação ao seu elemento pai */
+    background-color: #fff; /* Cor de fundo branca */
+    width: auto; /* Largura fixa */
+    padding: 4px; /* Espaçamento interno */
+    border-radius: 10px; /* Bordas arredondadas */
+    box-shadow: 0 3px 7px 1px rgba(0, 0, 0, 0.16); /* Sombra leve */
+    z-index: 2022; /* Para garantir que o dropdown fique sobre outros elementos */
+    top: 100%; /* Posiciona o dropdown logo abaixo do elemento pai */
+    left: 0; /* Alinha o dropdown à esquerda do elemento pai */
+    display: none; /* Oculta o dropdown por padrão */
+}
+
+/* Estilo para os itens do dropdown */
+.dropdown-content a {
+    color: black; /* Texto preto */
+    text-decoration: none; /* Remove sublinhado dos links */
+    padding: 10px; /* Espaçamento interno dos itens */
+    display: block; /* Faz com que os itens ocupem toda a largura disponível */
+}
+
+/* Estilo para os itens do dropdown ao passar o mouse */
+.dropdown-content a:hover {
+    background-color: #f0f0f0; /* Cor de fundo ao passar o mouse */
+}
+
+.all:hover .dropdown-content {
+    display: block; /* Mostra o dropdown ao passar o mouse sobre ALL */
+}
+
+/* Forçar a cor preta para links normais, não visitados e visitados */
+.Margem-letra:link .letra-boloco, 
+.Margem-letra:visited .letra-boloco {
     color: #000;
 }
-.Margem-letra{
+
+.Margem-letra:link .letra-boloco-selecionado, 
+.Margem-letra:visited .letra-boloco-selecionado {
+    color: #000;
+}
+
+/* Estilos gerais */
+.Margem-letra {
     height: 40px;
     display: flex;
     align-items: center;
     justify-content: center;
     text-decoration: none;
+    text-transform: uppercase;
 }
 
-/*Animacao*/
+/* Animação */
 .wrapper {
     width: 314px !important;
     height: 48px;
-    /*This part is important for centering*/
     display: grid;
     place-items: center;
-  }
+}
 
   @import url('https://fonts.googleapis.com/css2?family=Gruppo&family=Nixie+One&family=Unbounded:wght@200&display=swap');
   .typing-demo {
@@ -358,42 +426,4 @@ element.style {
 
 .dot:hover {
     background-color: rgba(255, 255, 255, 0.8);
-}
-
-/* Estilo para o dropdown dentro de ALL */
-.all {
-    position: relative;
-}
-
-/* Estilo para o dropdown-content */
-.dropdown-content {
-    display: flex;
-    flex-direction: column; /* Para mostrar os itens em coluna */
-    position: absolute; /* Para posicionar o dropdown em relação ao seu elemento pai */
-    background-color: #fff; /* Cor de fundo branca */
-    width: auto; /* Largura fixa */
-    padding: 4px; /* Espaçamento interno */
-    border-radius: 10px; /* Bordas arredondadas */
-    box-shadow: 0 3px 7px 1px rgba(0, 0, 0, 0.16); /* Sombra leve */
-    z-index: 2022; /* Para garantir que o dropdown fique sobre outros elementos */
-    top: 100%; /* Posiciona o dropdown logo abaixo do elemento pai */
-    left: 0; /* Alinha o dropdown à esquerda do elemento pai */
-    display: none; /* Oculta o dropdown por padrão */
-}
-
-/* Estilo para os itens do dropdown */
-.dropdown-content a {
-    color: black; /* Texto preto */
-    text-decoration: none; /* Remove sublinhado dos links */
-    padding: 10px; /* Espaçamento interno dos itens */
-    display: block; /* Faz com que os itens ocupem toda a largura disponível */
-}
-
-/* Estilo para os itens do dropdown ao passar o mouse */
-.dropdown-content a:hover {
-    background-color: #f0f0f0; /* Cor de fundo ao passar o mouse */
-}
-
-.all:hover .dropdown-content {
-    display: block; /* Mostra o dropdown ao passar o mouse sobre ALL */
 }

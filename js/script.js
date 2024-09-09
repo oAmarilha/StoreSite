@@ -122,6 +122,10 @@ document.addEventListener("DOMContentLoaded", function() {
             event.preventDefault();
             const category = event.target.getAttribute('data-category');
             applyFilter(category);
+            // Atualiza o texto do link "ALL" com o texto do link clicado
+            if (allLink) {
+                allLink.innerHTML = `<samp class="letra-boloco">${event.target.textContent}</samp>`;
+            }
         });
     });
     const bannerDiv = document.querySelector('.banner');
