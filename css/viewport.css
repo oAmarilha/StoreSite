@@ -43,12 +43,13 @@ body {
 }
 
 .product-section {
-    display: flex;
+    display:flex;
     gap: 20px;
 }
 
 .product-images {
     display: flex;
+    align-items: center;
     flex-direction: column;
     gap: 10px;
     width: 60%; /* Ajuste conforme necessário */
@@ -60,6 +61,7 @@ body {
     justify-content: center; /* Centraliza horizontalmente */
     gap: 10px;
     flex-wrap: nowrap; /* Garante que as imagens não se movam para a linha seguinte */
+    width: 710px;
 }
 
 .product-images .bottom-images-wrapper {
@@ -71,7 +73,6 @@ body {
 
 .product-images .bottom-images {
     display: flex;
-    margin-left: 16.5%;
     gap: 10px;
     flex-wrap: nowrap;
     overflow-x: auto; /* Adiciona rolagem horizontal se necessário */
