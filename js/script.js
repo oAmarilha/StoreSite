@@ -120,6 +120,7 @@ document.addEventListener("DOMContentLoaded", function() {
     navLinks.forEach(link => {
         link.addEventListener('click', (event) => {
             event.preventDefault();
+            const allLink = document.querySelector('.all .Margem-letra'); // Elemento onde o texto "ALL" está
             const category = event.target.getAttribute('data-category');
             applyFilter(category);
             // Atualiza o texto do link "ALL" com o texto do link clicado
