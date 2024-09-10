@@ -275,6 +275,7 @@ element.style {
     top: 100%; /* Posiciona o dropdown logo abaixo do elemento pai */
     left: 0; /* Alinha o dropdown à esquerda do elemento pai */
     display: none; /* Oculta o dropdown por padrão */
+    text-align: center;
 }
 
 /* Estilo para os itens do dropdown */
