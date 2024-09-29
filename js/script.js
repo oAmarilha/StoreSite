@@ -3,11 +3,50 @@ import { collection, getDocs, query } from 'https://www.gstatic.com/firebasejs/9
 import { ref, getDownloadURL } from 'https://www.gstatic.com/firebasejs/9.20.0/firebase-storage.js';
 
 document.addEventListener("DOMContentLoaded", function() {
+    const loading = document.getElementById('loading');
+    loading.style.display = 'flex'; // Mostra o loading
     const catalog = document.getElementById('catalog');
-    const navLinks = document.querySelectorAll('.nav-links a');
-    const mobileNavLinks = document.querySelectorAll('.mobile-nav-links a');
-    const mobileNavToggle = document.querySelector('.mobile-nav-toggle');
-    const noProductsMessageContainer = document.querySelector('.no-products-message-container');
+
+    // Função para obter os parâmetros da URL
+    function getQueryParams() {
+        const urlParams = new URLSearchParams(window.location.search);
+        return {
+            func: urlParams.get('func'),
+            category: urlParams.get('category'),
+        };
+    }
+
+    // Captura os parâmetros da URL e chama a função correspondente
+    const queryParams = getQueryParams();
+    if (queryParams.func === 'renderProducts' && queryParams.category !== "all") {
+        renderProducts(queryParams.category);
+        const allLink = document.querySelector('.all .Margem-letra'); // Elemento onde o texto "ALL" está
+        // Atualiza o texto do link "ALL" com o texto do link clicado
+        allLink.innerHTML = `<samp class="letra-boloco">${queryParams.category}</samp>`;
+        removeCategory(queryParams.category);
+        addCategory('all', 'Todos')
+    }
+    else
+    {    
+        // Inicializa o catálogo com todos os produtos
+        renderProducts();
+    }
+
+    // Função para adicionar um novo link como o primeiro
+    function addCategory(category, label) {
+        const dropdownContent = document.querySelector('.dropdown-content');
+        const newLinkHTML = `<a href="#" data-category="${category}">${label}</a>`;
+        dropdownContent.insertAdjacentHTML('afterbegin', newLinkHTML); // Adiciona o novo link como o primeiro elemento
+    }
+
+    function removeCategory(category) {
+        const dropdownLinks = document.querySelectorAll('.dropdown-content a'); // Seleciona todos os links no dropdown
+        dropdownLinks.forEach(link => {
+            if (link.getAttribute('data-category') === category) {
+                link.remove(); // Remove o link que corresponde à categoria
+            }
+        });
+    }
 
     // Função para buscar todos os produtos do Firestore
     async function fetchAllProducts() {
@@ -37,124 +76,186 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     // Função para renderizar produtos no catálogo
-function renderProducts(filterCategory = 'all') {
-    const loading = document.getElementById('loading');
-    catalog.innerHTML = ''; // Limpa o catálogo
-    noProductsMessageContainer.style.display = 'none'; // Esconde a mensagem de nenhum produto
-    loading.style.display = 'flex'; // Mostra o loading
+    function renderProducts(filterCategory = 'all') {
+        catalog.innerHTML = ''; // Limpa o catálogo
+        loading.style.display = 'flex'; // Mostra o loading
+    
+        fetchAllProducts().then(products => {
+            const filteredProducts = filterCategory === 'all' ?
+                products :
+                products.filter(product => product.category === filterCategory);
+            
+            // Cria o elemento da mensagem se ainda não existir
+            let noProductsMessage = document.querySelector('.no-products-message');
+            if (!noProductsMessage) {
+                noProductsMessage = document.createElement('div');
+                noProductsMessage.classList.add('no-products-message');
+                noProductsMessage.textContent = 'Nenhum produto encontrado.';
+                catalog.appendChild(noProductsMessage); // Adiciona ao DOM dentro do catálogo
+            }
+    
+            // Atualiza a visibilidade da mensagem
+            if (filteredProducts.length === 0) {
+                noProductsMessage.style.display = 'block'; // Exibe a mensagem
+            } else {
+                noProductsMessage.style.display = 'none'; // Esconde a mensagem
+                filteredProducts.forEach(product => {
+                    const productCard = document.createElement('div');
+                    productCard.classList.add('product-card');
+    
+                    const productImage = document.createElement('img');
+                    productImage.src = product.images.length > 0 ? product.images[0] : ''; 
+                    productImage.alt = product.name;
+                    productImage.style.cursor = 'pointer';
+                    const category = encodeURIComponent(product.category);
+                    const name = encodeURIComponent(product.name);
+                    productImage.addEventListener('click', () => {
+                        window.location.href = `viewport.html?grid=productpage&category=${category}&name=${name}`;
+                    });
+    
+                    const productTitle = document.createElement('h2');
+                    productTitle.textContent = product.name;
+    
+                    const productPrice = document.createElement('p');
+                    productPrice.textContent = `R$ ${product.price.toFixed(2)}`;
+    
+                    const buyButton = document.createElement('a');
+                    buyButton.href = `viewport.html?category=${category}&name=${name}`;
+                    buyButton.target = "_self";
+                    buyButton.classList.add('buy-button');
+                    buyButton.textContent = 'Comprar';
+    
+                    productCard.appendChild(productImage);
+                    productCard.appendChild(productTitle);
+                    productCard.appendChild(productPrice);
+                    productCard.appendChild(buyButton);
+    
+                    catalog.appendChild(productCard);
+                });
+            }
+            loading.style.display = 'none'; // Esconde o loading após o carregamento
+        });
+    }
 
-    fetchAllProducts().then(products => {
-        const filteredProducts = filterCategory === 'all' ?
-            products :
-            products.filter(product => product.category === filterCategory);
+    const bannerDiv = document.querySelector('.banner');
 
-        if (filteredProducts.length === 0) {
-            noProductsMessageContainer.style.display = 'flex'; // Mostra a mensagem se não houver produtos
+// Fetch banner images from Firestore
+async function fetchBannerImages() {
+    const bannerCollection = collection(db, 'banner');
+    const querySnapshot = await getDocs(bannerCollection);
+    const imageUrls = [];
+
+    for (const doc of querySnapshot.docs) {
+        const data = doc.data();
+        
+        let imagePaths = [];
+        if (Array.isArray(data.imagePath)) {
+            imagePaths = data.imagePath;
+        } else if (typeof data.imagePath === 'string') {
+            imagePaths = [data.imagePath];
         }
 
-        filteredProducts.forEach(product => {
-            const productCard = document.createElement('div');
-            productCard.classList.add('product-card');
+        for (const imagePath of imagePaths) {
+            try {
+                const imageRef = ref(storage, imagePath.trim());
+                const imageUrl = await getDownloadURL(imageRef);
+                imageUrls.push(imageUrl);
+            } catch (error) {
+                console.error("Error fetching image URL:", error);
+            }
+        }
+    }
 
-            const productImage = document.createElement('img');
-            productImage.src = product.images.length > 0 ? product.images[0] : ''; 
-            productImage.alt = product.name;
-            productImage.style.cursor = 'pointer';
-            productImage.addEventListener('click', () => {
-                const category = encodeURIComponent(product.category);
-                const name = encodeURIComponent(product.name);
-                window.location.href = `product.html?category=${category}&name=${name}`;
-            });
-
-            const productTitle = document.createElement('h2');
-            productTitle.textContent = product.name;
-
-            const productPrice = document.createElement('p');
-            productPrice.textContent = `R$ ${product.price.toFixed(2)}`;
-
-            const buyButton = document.createElement('a');
-            buyButton.href = `https://wa.me/5519971342856?text=Olá, gostaria de comprar a ${product.name}.`;
-            buyButton.target = "_blank";
-            buyButton.classList.add('buy-button');
-            buyButton.textContent = 'Comprar';
-
-            productCard.appendChild(productImage);
-            productCard.appendChild(productTitle);
-            productCard.appendChild(productPrice);
-            productCard.appendChild(buyButton);
-
-            catalog.appendChild(productCard);
-        });
-
-        loading.style.display = 'none'; // Esconde o loading após o carregamento
-    });
+    return imageUrls;
 }
 
+// Render banner images with smooth transitions
+async function renderBanner() {
+    const imageUrls = await fetchBannerImages();
 
-    // Função para aplicar o filtro de categoria
-    function applyFilter(category) {
-        renderProducts(category);
-        setActiveLink(category);
-        closeMobileNav();
+    if (imageUrls.length === 0) {
+        bannerDiv.innerHTML = '<p>No banners available</p>';
+        return;
     }
 
-    // Função para definir o link ativo na navegação
-    function setActiveLink(category) {
-        navLinks.forEach(link => {
-            if (link.getAttribute('data-category') === category) {
-                link.classList.add('active');
-            } else {
-                link.classList.remove('active');
-            }
-        });
+    let currentIndex = 0;
+    let autoSlideInterval;
 
-        mobileNavLinks.forEach(link => {
-            if (link.getAttribute('data-category') === category) {
-                link.classList.add('active');
-            } else {
-                link.classList.remove('active');
-            }
-        });
-    }
-
-    // Função para abrir/fechar o menu móvel
-    function toggleMobileNav() {
-        const mobileNav = document.querySelector('.mobile-nav-links');
-        mobileNav.classList.toggle('open');
-    }
-
-    // Função para fechar o menu móvel
-    function closeMobileNav() {
-        const mobileNav = document.querySelector('.mobile-nav-links');
-        mobileNav.classList.remove('open');
-    }
-
-    // Inicializa o catálogo com todos os produtos
-    renderProducts();
-
-    // Adiciona eventos de clique aos links de navegação para aplicar o filtro
-    navLinks.forEach(link => {
-        link.addEventListener('click', (event) => {
-            event.preventDefault();
-            const category = event.target.getAttribute('data-category');
-            applyFilter(category);
-        });
+    // Create image elements and set initial opacity
+    imageUrls.forEach((url, index) => {
+        const img = document.createElement('img');
+        img.src = url;
+        img.style.opacity = index === 0 ? '1' : '0';
+        img.classList.add('banner-image', 'fade');
+        bannerDiv.appendChild(img);
     });
 
-    // Adiciona eventos de clique aos links de navegação móvel para aplicar o filtro
-    mobileNavLinks.forEach(link => {
-        link.addEventListener('click', (event) => {
-            if (link.classList.contains('manage-link')) {
-                return; // Ignora o link "Gerenciar Coleções"
-            }
-            event.preventDefault();
-            const category = event.target.getAttribute('data-category');
-            applyFilter(category);
-        });
-    });
+    const images = bannerDiv.querySelectorAll('.banner-image');
 
-    // Adiciona evento de clique para o botão de alternar menu móvel
-    mobileNavToggle.addEventListener('click', () => {
-        toggleMobileNav();
+    // Function to show a specific image with a fade effect
+    function showImage(index) {
+        images[currentIndex].style.opacity = '0'; // Fade out the current image
+        currentIndex = index;
+        images[currentIndex].style.opacity = '1'; // Fade in the next image
+        updateDots();
+    }
+
+    // Function to show the next image
+    function showNextImage() {
+        showImage((currentIndex + 1) % imageUrls.length);
+    }
+
+    // Function to show the previous image
+    function showPreviousImage() {
+        showImage((currentIndex - 1 + imageUrls.length) % imageUrls.length);
+    }
+
+    // Create dots for navigation
+    const dotsContainer = document.createElement('div');
+    dotsContainer.classList.add('dots-container');
+    imageUrls.forEach((_, index) => {
+        const dot = document.createElement('span');
+        dot.classList.add('dot');
+        if (index === 0) {
+            dot.classList.add('active');
+        }
+        dot.addEventListener('click', () => showImage(index));
+        dotsContainer.appendChild(dot);
     });
+    bannerDiv.appendChild(dotsContainer);
+
+    // Update dot appearance based on the current image
+    function updateDots() {
+        const dots = dotsContainer.querySelectorAll('.dot');
+        dots.forEach((dot, index) => {
+            dot.classList.toggle('active', index === currentIndex);
+        });
+    }
+
+    // Automatic scrolling
+    autoSlideInterval = setInterval(showNextImage, 7000);
+
+    // User controls for next and previous
+    const nextButton = document.createElement('button');
+    nextButton.classList.add('arrow', 'next');
+    nextButton.innerHTML = '&#9654;'; // Right arrow symbol
+    nextButton.addEventListener('click', () => {
+        clearInterval(autoSlideInterval); // Stop auto-slide when user interacts
+        showNextImage();
+        autoSlideInterval = setInterval(showNextImage, 7000); // Restart auto-slide
+    });
+    bannerDiv.appendChild(nextButton);
+
+    const prevButton = document.createElement('button');
+    prevButton.classList.add('arrow', 'prev');
+    prevButton.innerHTML = '&#9664;'; // Left arrow symbol
+    prevButton.addEventListener('click', () => {
+        clearInterval(autoSlideInterval);
+        showPreviousImage();
+        autoSlideInterval = setInterval(showNextImage, 7000);
+    });
+    bannerDiv.appendChild(prevButton);
+}
+
+renderBanner();
 });

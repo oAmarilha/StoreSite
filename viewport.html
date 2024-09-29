@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Info</title>
+    <link rel="stylesheet" href="css/viewport.css">
+    <link rel="stylesheet" href="css/index.css">
+    <script src="js/header.js" defer></script>
+    <script type="module" src="js/viewport.js" defer></script>
+</head>
+
+<body>
+    <header></header> <!-- Header será inserido aqui -->
+    
+    <div class="breadcrumb">
+        HOME > CATÁLOGO > PRODUTO 
+    </div>
+    
+    <div class="container">
+        <div class="product-section">
+            <div class="product-images">
+                <div class="top-images"></div>
+                <div class="bottom-images"></div>
+            </div>
+            <div class="product-details">
+                <h1 id="title"></h1>
+                <p>Características: T3-24066</p>
+                <div id="price"></div>
+                <div class="sizes">
+                    <button class="active">S</button>
+                    <button>M</button>
+                    <button>L</button>
+                    <button>XL</button>
+                </div>
+                <div class="add-to-cart">
+                    <button>ADICIONAR AO CARRINHO</button>
+                </div>
+            </div>
+        </div>
+    </div>   
+    <div class="container">
+        <div id="tabs-container" class="tabs">
+            <!-- As abas serão inseridas dinamicamente aqui -->
+        </div>
+        <div id="tab-content-container" class="tab-content">
+            <!-- O conteúdo da aba será inserido dinamicamente aqui -->
+        </div>
+    </div>
+
+    <div class="footer">
+        <div class="links">
+            <a href="#">Lojas</a>
+        </div>
+        <div class="social-icons">
+            <i class="fab fa-facebook-f"></i>
+            <i class="fab fa-twitter"></i>
+            <i class="fab fa-instagram"></i>
+        </div>
+
+        <div id="image-modal" class="modal" style="display: none;">
+            <span class="close">&times;</span>
+            <img class="modal-content" id="modal-image">
+            <button class="prev">&#10094;</button>
+            <button class="next">&#10095;</button>
+            <div id="image-counter" class="image-counter"></div> <!-- Contador de imagens -->
+        </div>
+        
+        <div id="loading" class="loading">
+            <div class="spinner"></div>
+        </div>
+    </div>
+</body>
+</html>
