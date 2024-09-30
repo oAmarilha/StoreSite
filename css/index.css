@@ -110,7 +110,7 @@ header h1 {
 }
 
 .product-card {
-    background-color: black;
+    background-color: #111;
     border-radius: 10px;
     box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
     overflow: hidden;
@@ -145,16 +145,16 @@ header h1 {
     display: block;
     text-align: center;
     padding: 0.75rem;
-    background: rgb(0, 170, 255); /* Azul médio */
+    background: #000; /* Azul médio */
     font-weight: bold;
-    color: black;
+    color: #fff;
     text-decoration: none;
     border-radius: 0 0 10px 10px;
     transition: background-color 0.3s;
 }
 
 .buy-button:hover {
-    background-color: #43a047; /* Verde */
+    background-color: #222; /* Verde */
 }
 
 .product-card:hover {
@@ -263,7 +263,6 @@ element.style {
 
 /* Estilo para o dropdown-content */
 .dropdown-content {
-    display: flex;
     flex-direction: column; /* Para mostrar os itens em coluna */
     position: absolute; /* Para posicionar o dropdown em relação ao seu elemento pai */
     background-color: #fff; /* Cor de fundo branca */

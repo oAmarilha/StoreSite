@@ -6,7 +6,47 @@ document.addEventListener("DOMContentLoaded", function() {
     const loading = document.getElementById('loading');
     loading.style.display = 'flex'; // Mostra o loading
     const catalog = document.getElementById('catalog');
-    const navLinks = document.querySelectorAll('.dropdown-content');
+
+    // Função para obter os parâmetros da URL
+    function getQueryParams() {
+        const urlParams = new URLSearchParams(window.location.search);
+        return {
+            func: urlParams.get('func'),
+            category: urlParams.get('category'),
+        };
+    }
+
+    // Captura os parâmetros da URL e chama a função correspondente
+    const queryParams = getQueryParams();
+    if (queryParams.func === 'renderProducts' && queryParams.category !== "all") {
+        renderProducts(queryParams.category);
+        const allLink = document.querySelector('.all .Margem-letra'); // Elemento onde o texto "ALL" está
+        // Atualiza o texto do link "ALL" com o texto do link clicado
+        allLink.innerHTML = `<samp class="letra-boloco">${queryParams.category}</samp>`;
+        removeCategory(queryParams.category);
+        addCategory('all', 'Todos')
+    }
+    else
+    {    
+        // Inicializa o catálogo com todos os produtos
+        renderProducts();
+    }
+
+    // Função para adicionar um novo link como o primeiro
+    function addCategory(category, label) {
+        const dropdownContent = document.querySelector('.dropdown-content');
+        const newLinkHTML = `<a href="#" data-category="${category}">${label}</a>`;
+        dropdownContent.insertAdjacentHTML('afterbegin', newLinkHTML); // Adiciona o novo link como o primeiro elemento
+    }
+
+    function removeCategory(category) {
+        const dropdownLinks = document.querySelectorAll('.dropdown-content a'); // Seleciona todos os links no dropdown
+        dropdownLinks.forEach(link => {
+            if (link.getAttribute('data-category') === category) {
+                link.remove(); // Remove o link que corresponde à categoria
+            }
+        });
+    }
 
     // Função para buscar todos os produtos do Firestore
     async function fetchAllProducts() {
@@ -70,7 +110,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     const category = encodeURIComponent(product.category);
                     const name = encodeURIComponent(product.name);
                     productImage.addEventListener('click', () => {
-                        window.location.href = `viewport.html?category=${category}&name=${name}`;
+                        window.location.href = `viewport.html?grid=productpage&category=${category}&name=${name}`;
                     });
     
                     const productTitle = document.createElement('h2');
@@ -96,39 +136,7 @@ document.addEventListener("DOMContentLoaded", function() {
             loading.style.display = 'none'; // Esconde o loading após o carregamento
         });
     }
-    
-    // Função para aplicar o filtro de categoria
-    function applyFilter(category) {
-        renderProducts(category);
-        setActiveLink(category);
-    }
 
-    // Função para definir o link ativo na navegação
-    function setActiveLink(category) {
-        navLinks.forEach(link => {
-            if (link.getAttribute('data-category') === category) {
-                link.classList.add('active');
-            } else {
-                link.classList.remove('active');
-            }
-        });
-    }
-    // Inicializa o catálogo com todos os produtos
-    renderProducts();
-
-    // Adiciona eventos de clique aos links de navegação para aplicar o filtro
-    navLinks.forEach(link => {
-        link.addEventListener('click', (event) => {
-            event.preventDefault();
-            const allLink = document.querySelector('.all .Margem-letra'); // Elemento onde o texto "ALL" está
-            const category = event.target.getAttribute('data-category');
-            applyFilter(category);
-            // Atualiza o texto do link "ALL" com o texto do link clicado
-            if (allLink) {
-                allLink.innerHTML = `<samp class="letra-boloco">${event.target.textContent}</samp>`;
-            }
-        });
-    });
     const bannerDiv = document.querySelector('.banner');
 
 // Fetch banner images from Firestore
